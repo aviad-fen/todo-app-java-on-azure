@@ -26,7 +26,7 @@ node('master') {
                 echo "\$AZURE_CLIENT_ID"
                 echo "\$AZURE_CLIENT_SECRET"
                 echo "\$AZURE_TENANT_ID"
-                az login --service-principal -u "\$AZURE_CLIENT_ID" -p "\$AZURE_CLIENT_SECRET" -t "\$AZURE_TENANT_ID"
+                az login --service-principal --username "\$AZURE_CLIENT_ID" --password "\$AZURE_CLIENT_SECRET" --tenant "\$AZURE_TENANT_ID"
                 az account set --subscription "\$AZURE_SUBSCRIPTION_ID"
                 set +x
                 set -x
@@ -54,7 +54,7 @@ node('master') {
         withCredentials([azureServicePrincipal(servicePrincipalId)]) {
             // fetch the current service configuration
             sh """
-              az login --service-principal -u "\$AZURE_CLIENT_ID" -p "\$AZURE_CLIENT_SECRET" -t "\$AZURE_TENANT_ID"
+              az login --service-principal --username "\$AZURE_CLIENT_ID" --password "\$AZURE_CLIENT_SECRET" --tenant "\$AZURE_TENANT_ID"
               az account set --subscription "\$AZURE_SUBSCRIPTION_ID"
               az aks get-credentials --resource-group "${resourceGroup}" --name "${aks}" --admin --file kubeconfig
               az logout
