@@ -35,7 +35,7 @@ node('master') {
 
     stage('Docker Image') {
         
-        acrQuickBuild azureCredentialsId: dockerCredentialId,
+        acrQuickTask azureCredentialsId: dockerCredentialId,
                       resourceGroupName: env.ACR_RES_GROUP,
                       registryName: env.ACR_NAME,
                       platform: "Linux",
