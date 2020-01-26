@@ -26,7 +26,7 @@ node('master') {
                 echo "$AZURE_CLIENT_ID"
                 echo "$AZURE_CLIENT_SECRET"
                 echo "$AZURE_TENANT_ID"
-                az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+                az login --service-principal --username "d74a5a3c-4328-46e3-b6bd-37caace5e754" --password "7p/-3jN[sr3C2@Hd9O:Adc5QYVd1b5Vc" --tenant "e96d766f-37c3-4fe4-8d91-6c917fb5339f"
                 az account set --subscription "$AZURE_SUBSCRIPTION_ID"
                 set +x
                 set -x
