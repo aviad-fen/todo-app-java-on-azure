@@ -34,15 +34,18 @@ node('master') {
     }
 
     stage('Docker Image') {
-        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
-            dir('target') {
-                sh """
-                    cp -f ../src/aks/Dockerfile .
-                    docker build -t "${env.IMAGE_TAG}" .
-                    docker push "${env.IMAGE_TAG}"
-                """
-            }
-        }
+        
+        acrQuickBuild azureCredentialsId: env.AZURE_CRED_ID,
+                      resourceGroupName: env.ACR_RES_GROUP,
+                      registryName: env.ACR_NAME,
+                      platform: "Linux",
+                      dockerfile: 'deploy/aks/Dockerfile',
+                      gitBranch: '',
+                      gitPath: '',
+                      gitRepo: 'https://github.com/Microsoft/todo-app-java-on-azure',
+                      imageNames: [[image: "$env.ACR_REGISTRY/$env.IMAGE_NAME:$env.BUILD_NUMBER"]],
+                      sourceType: 'git'
+     
     }
 
     stage('Check Env') {
