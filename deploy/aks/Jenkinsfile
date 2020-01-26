@@ -1,17 +1,15 @@
 node('master') {
 
-    def servicePrincipalId = '<your-service-principal>'
-    def resourceGroup = '<your-resource-group-name>'
-    def aks = '<your-kubernetes-cluster-name>'
-
-    def cosmosResourceGroup = '<your-cosmodb-resource-group>'
-    def cosmosDbName = '<your-cosmodb-name>'
-    def dbName = '<your-dbname>'
-
-    def dockerRegistry = '<your-acr-name>.azurecr.io'
+    def servicePrincipalId = 'AzureKubernetesId'
+    def resourceGroup = 'RTDS-QA-RG'
+    def aks = 'RTDSQAAKS'
+    
+    
+    def dockerRegistry = 'rtdsqa.azurecr.io'
+    
     def imageName = "todo-app:${env.BUILD_NUMBER}"
     env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
-    def dockerCredentialId = '<your-acr-credential-id>'
+    def dockerCredentialId = '	AzureContainersRegistryId'
 
     def currentEnvironment = 'blue'
     def newEnvironment = { ->
@@ -27,13 +25,8 @@ node('master') {
             sh """
                 az login --service-principal -u "\$AZURE_CLIENT_ID" -p "\$AZURE_CLIENT_SECRET" -t "\$AZURE_TENANT_ID"
                 az account set --subscription "\$AZURE_SUBSCRIPTION_ID"
-
                 set +x
-                export DOCUMENTDB_URI="\$(az cosmosdb show -g "${cosmosResourceGroup}" -n "${cosmosDbName}" --query documentEndpoint -o tsv)"
-                export DOCUMENTDB_KEY="\$(az cosmosdb list-keys -g "${cosmosResourceGroup}" -n "${cosmosDbName}" --query primaryMasterKey -o tsv)"
-                export DOCUMENTDB_DBNAME="${dbName}"
                 set -x
-
                 sh ./mvnw clean package
                 az logout
             """
