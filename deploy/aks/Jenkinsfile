@@ -23,11 +23,11 @@ node('master') {
     stage('Build') {
         withCredentials([azureServicePrincipal(servicePrincipalId)]) {
             sh """
-                echo "$AZURE_CLIENT_ID"
-                echo "$AZURE_CLIENT_SECRET"
-                echo "$AZURE_TENANT_ID"
-                az login --service-principal --username "d74a5a3c-4328-46e3-b6bd-37caace5e754" --password "7p/-3jN[sr3C2@Hd9O:Adc5QYVd1b5Vc" --tenant "e96d766f-37c3-4fe4-8d91-6c917fb5339f"
-                az account set --subscription "29c249c0-6c77-42f7-8547-04e8d3797dad"
+                echo $AZURE_CLIENT_ID
+                echo $AZURE_CLIENT_SECRET
+                echo $AZURE_TENANT_ID
+                az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
+                az account set --subscription $AZURE_SUBSCRIPTION_ID
                 set +x
                 set -x
                 sh ./mvnw clean package
