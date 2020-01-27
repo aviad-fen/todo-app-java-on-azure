@@ -49,10 +49,11 @@ node('master') {
         // Apply the deployments to AKS.
         // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
         // will be replaced with environment variable values
+        sh 'wget https://raw.githubusercontent.com/microsoft/todo-app-java-on-azure/master/deploy/aks/deployment.yml -O deployment.yml'
         acsDeploy azureCredentialsId: servicePrincipalId,
                   resourceGroupName: resourceGroup,
                   containerService: "${aks} | AKS",
-                  configFilePaths: 'deploy/aks/deployment.yml',
+                  configFilePaths: 'deployment.yml',
                   enableConfigSubstitution: true,
                   secretName: dockerRegistry,
                   containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "https://${dockerRegistry}"]]
